@@ -7,7 +7,7 @@ jobs:
   db-backup:
     runs-on: ubuntu-latest
     steps:
-      - name: update
+      - name: Update
         run: |
           pg_dump -V
           sudo apt-get --purge remove postgresql postgresql-*
@@ -31,3 +31,11 @@ jobs:
           database_url: "postgres://postgres:hoduecaramelle@db.mmucqujjuxgcszwyrbil.supabase.co:5432/postgres"
           path: "backups/backup.sql" 
           options: "-O"
+      - name: Zip
+        run: zip -r backup.zip backups/backup.sql
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v3
+        with:
+          name: db-backup
+          path: backup.zip
+          retention-days: 1
